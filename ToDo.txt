@@ -1,0 +1,6 @@
+[x]  1. Java Project Setup
+[x]  2. Remote Repository setup, all team members are able to commit/push
+[]  3. REST Server created
+       Endpoints defined by the team
+[]  4. Requests to endpoints return a hardcoded result
+[]  5. Initial docker-compose.yml, used to run the REST-server inside a container
