@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api:
     build:
-      context: ./api                    # Verzeichnis, in dem sich das Dockerfile der RestAPI befindet
+      context: ./src/main/java/org/example/paperless_components/RestAPI                    # Verzeichnis, in dem sich das Dockerfile der RestAPI befindet
     container_name: rest-api
     ports:
       - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
@@ -12,3 +12,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod     # Beispiel-Umgebungsvariable für deine API
 
+networks:
+  app-network:
+    driver: bridge

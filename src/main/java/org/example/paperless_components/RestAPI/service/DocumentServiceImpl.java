@@ -1,8 +1,8 @@
-package org.example.paperless_components.service;
+package org.example.paperless_components.RestAPI.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.paperless_components.service.dtos.DocumentDto;
-import org.example.paperless_components.service.mapper.DocumentService;
+import org.example.paperless_components.RestAPI.service.dtos.DocumentDto;
+import org.example.paperless_components.RestAPI.service.mapper.DocumentService;
 import org.springframework.stereotype.Service;
 
 @Slf4j

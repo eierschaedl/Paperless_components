@@ -1,4 +1,4 @@
-package org.example.paperless_components.service.dtos;
+package org.example.paperless_components.RestAPI.service.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
