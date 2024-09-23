@@ -1,6 +1,6 @@
-package org.example.paperless_components.api;
-import org.example.paperless_components.service.mapper.DocumentService;
-import org.example.paperless_components.service.dtos.DocumentDto;
+package org.example.paperless_components.RestAPI.api;
+import org.example.paperless_components.RestAPI.service.mapper.DocumentService;
+import org.example.paperless_components.RestAPI.service.dtos.DocumentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
