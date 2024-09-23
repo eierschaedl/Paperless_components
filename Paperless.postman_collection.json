@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "16ff164b-d91f-453c-ba1a-edcde6a34b94",
+		"name": "Paperless",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33297852"
+	},
+	"item": [
+		{
+			"name": "REST_API",
+			"item": [
+				{
+					"name": "UploadTest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "asdf"
+						},
+						"url": {
+							"raw": "localhost:8081/document/upload",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchTest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/document/search?text=abc",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"search"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "abc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MetadataSearchTest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/document/1/metadata",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"1",
+								"metadata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MetadatUpdateTest",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/document/1/metadata",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"1",
+								"metadata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTest",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/document/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DownloadTest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/document/1/download",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"document",
+								"1",
+								"download"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
