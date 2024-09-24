@@ -6,7 +6,6 @@ COPY . .
 
 # Step 3: Baue das Projekt
 RUN mvn install clean package -DskipTests
-
 # Step 4: Verwende ein leichtgewichtiges OpenJDK Runtime Image
 FROM openjdk:17-jdk-alpine
 WORKDIR /app
