@@ -2,12 +2,12 @@
 
 - [x]  1. Java Project Setup
 - [x]  2. Remote Repository setup, all team members are able to commit/push
-- [ ]  3. REST Server created  
+- [x]  3. REST Server created  
           Endpoints defined by the team
-- [ ]  4. Requests to endpoints return a hardcoded result
-- [ ]  5. Docker:
-    - [ ] Dockerfile für API erstellen
-    - [ ] Initial docker-compose.yml, used to run the REST-server inside a container
+- [x]  4. Requests to endpoints return a hardcoded result
+- [x]  5. Docker:
+    - [x] Dockerfile für API erstellen
+    - [x] Initial docker-compose.yml, used to run the REST-server inside a container
 
 ---
 ### Code snippets How-To: File ablegen/abspeichern
@@ -35,3 +35,4 @@ file.transferTo(destination);
 - [ ] 3. Docker:
     - [ ] Dockerfile für Webserver erstellen
     - [ ] docker-compose.yml anpassen (zusätzlicher service "fronend")
+---
