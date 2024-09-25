@@ -4,13 +4,15 @@ services:
   api:
     build:
       context: .                  # Verzeichnis, in dem sich das Dockerfile-API der RestAPI befindet
+      dockerfile: Dockerfile-API
     container_name: rest-api
     ports:
       - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
     networks:
       - app-network
     environment:
-      - SPRING_PROFILES_ACTIVE=prod     # Beispiel-Umgebungsvariable für deine API
+      - SPRING_PROFILES_ACTIVE=prod
+
 
 networks:
   app-network:
