@@ -13,15 +13,15 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile-Frontend
-    container_name: frontend
-    ports:
-      - "81:81"
-    networks:
-      - app-network
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-Frontend
+#    container_name: frontend
+#    ports:
+#      - "81:81"
+#    networks:
+#      - app-network
 
 networks:
   app-network:
