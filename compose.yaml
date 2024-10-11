@@ -1,27 +1,27 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .                  # Verzeichnis, in dem sich das Dockerfile-API der RestAPI befindet
-      dockerfile: Dockerfile-API
-    container_name: rest-api
-    ports:
-      - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
-    networks:
-      - app-network
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-
-#  frontend:
+#  api:
 #    build:
-#      context: .
-#      dockerfile: Dockerfile-Frontend
-#    container_name: frontend
+#      context: .                  # Verzeichnis, in dem sich das Dockerfile-API der RestAPI befindet
+#      dockerfile: Dockerfile-API
+#    container_name: rest-api
 #    ports:
-#      - "81:81"
+#      - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
 #    networks:
 #      - app-network
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+
+    frontend:
+      build:
+        context: .
+        dockerfile: Dockerfile-Frontend
+      container_name: frontend
+      ports:
+        - "81:81"
+      networks:
+        - app-network
 
 networks:
   app-network:
