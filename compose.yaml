@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .                  # Verzeichnis, in dem sich das Dockerfile-API der RestAPI befindet
-      dockerfile: Dockerfile-API
+      dockerfile: Dockerfiles/Dockerfile-API
     container_name: rest-api
     ports:
       - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
@@ -16,13 +16,30 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile-Frontend
+      dockerfile: Dockerfiles/Dockerfile-Frontend
     container_name: frontend
     ports:
       - "81:81"
     networks:
       - app-network
 
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile-Postgres
+    container_name: Datenbank
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

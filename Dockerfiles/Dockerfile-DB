@@ -1,0 +1,7 @@
+FROM postgres:13
+
+ENV POSTGRES_USER=user
+ENV POSTGRES_PASSWORD=my_cool_password
+ENV POSTGRES_DB=paperless
+
+EXPOSE 5432
