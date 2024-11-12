@@ -2,6 +2,7 @@ import './App.css';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import SearchBar from './components/SearchBar';
+import FileUpload from "./components/FileUpload";
 
 function App() {
   /*ToDo
@@ -36,6 +37,7 @@ function App() {
     <div className="App">
       {header}
       <SearchBar onSearch={handleSearch} />
+      <FileUpload />
     </div>
   );
 }
