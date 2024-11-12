@@ -1,9 +1,9 @@
-package org.example.paperless_components.RestAPI.service.mapper;
+package org.example.paperless_components.RestAPI.service;
 
 import org.example.paperless_components.RestAPI.service.dtos.DocumentDto;
 
 public interface DocumentService {
 
-    DocumentDto uploadDocument(String document);
+    DocumentDto uploadDocument(DocumentDto documentDto);
 
 }

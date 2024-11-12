@@ -1,5 +1,6 @@
 package org.example.paperless_components.RestAPI.api;
-import org.example.paperless_components.RestAPI.service.mapper.DocumentService;
+import org.example.paperless_components.RestAPI.service.DocumentService;
+import org.example.paperless_components.RestAPI.service.DocumentServiceImpl;
 import org.example.paperless_components.RestAPI.service.dtos.DocumentDto;
 import org.example.paperless_components.RestAPI.service.rabbitmq.RabbitMQService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +15,21 @@ import java.util.List;
 @RequestMapping(path = "document")
 
 public class DocumentAPI {
-    private final DocumentService documentService;
+    private final DocumentServiceImpl documentService;
 
     @Autowired
-    public DocumentAPI(DocumentService documentService) { this.documentService = documentService; }
+    public DocumentAPI(DocumentServiceImpl documentService) { this.documentService = documentService; }
 
     @PostMapping("/upload")
-    public ResponseEntity<DocumentDto> postDocument(@RequestBody String document) {
-        DocumentDto uploadedDocument = documentService.uploadDocument(document);
+    public ResponseEntity<DocumentDto> postDocument(@RequestBody DocumentDto documentDto) {
+        DocumentDto uploadedDocument = documentService.uploadDocument(documentDto);
+        /*
         try {
             new RabbitMQService().sendMessageToQueue("Document uploaded");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+         */
         return ResponseEntity.ok(uploadedDocument);
     }
 
@@ -57,9 +60,6 @@ public class DocumentAPI {
     public ResponseEntity<DocumentDto> getDocumentDownload(@PathVariable String documentId) {
         return null;
     }
-
-
-    //get
 
 
 }

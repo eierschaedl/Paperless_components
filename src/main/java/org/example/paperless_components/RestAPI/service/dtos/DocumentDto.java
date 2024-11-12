@@ -1,17 +1,21 @@
 package org.example.paperless_components.RestAPI.service.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.sql.Timestamp;
+
+
+@Data
 @Setter
 @Getter
-public class DocumentDto {
-    private String id;
-    private String title;
+@AllArgsConstructor
+@Builder
 
-    public DocumentDto(String id, String title) {
-        this.id = id;
-        this.title = title;
-    }
+public class DocumentDto {
+
+    private Long id;
+    private String name;
+    private String path;
+    private Timestamp dateupload;
 
 }
