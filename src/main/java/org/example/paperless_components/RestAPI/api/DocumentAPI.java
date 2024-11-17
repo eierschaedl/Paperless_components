@@ -13,23 +13,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "document")
-
 public class DocumentAPI {
     private final DocumentServiceImpl documentService;
+    private final RabbitMQService rabbitMQService;
 
     @Autowired
-    public DocumentAPI(DocumentServiceImpl documentService) { this.documentService = documentService; }
-
+    public DocumentAPI(DocumentServiceImpl documentService, RabbitMQService rabbitMQService) {
+        this.documentService = documentService;
+        this.rabbitMQService = rabbitMQService;
+    }
     @PostMapping("/upload")
     public ResponseEntity<DocumentDto> postDocument(@RequestBody DocumentDto documentDto) {
         DocumentDto uploadedDocument = documentService.uploadDocument(documentDto);
-        /*
-        try {
-            new RabbitMQService().sendMessageToQueue("Document uploaded");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-         */
+        rabbitMQService.sendMessageToQueue("Hello, RabbitMQ!");
         return ResponseEntity.ok(uploadedDocument);
     }
 
