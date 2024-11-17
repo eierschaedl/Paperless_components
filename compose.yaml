@@ -3,15 +3,17 @@ version: '3.8'
 services:
   api:
     build:
-      context: .                  # Verzeichnis, in dem sich das Dockerfile-API der RestAPI befindet
+      context: .
       dockerfile: Dockerfiles/Dockerfile-API
     container_name: rest-api
     ports:
-      - "8081:8081"                     # Mappe den Container-Port 8081 auf den Host-Port 8081
+      - "8081:8081"
     networks:
       - app-network
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - shared-pdfs:/app/pdfs
 
   frontend:
     build:
@@ -47,6 +49,17 @@ services:
     networks:
       - app-network
 
+  tesseract-ocr:
+    build:
+      context: .
+      dockerfile: Dockerfiles/Dockerfile-Tesseract-OCR
+    container_name: tesseract-ocr
+    volumes:
+      - shared-pdfs:/app/pdfs
+    networks:
+      - app-network
+    command: python main.py
+
 networks:
   app-network:
     driver: bridge
@@ -54,3 +67,9 @@ networks:
 volumes:
   postgres_data:
     driver: local
+  shared-pdfs:
+    driver: local
+    driver_opts:
+      o: bind
+      device: ./PDFs
+      type: none
