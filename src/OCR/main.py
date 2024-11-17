@@ -5,16 +5,13 @@ import pytesseract
 
 def process_pdf(pdf_path, output_folder):
     try:
-        # PDF in Bilder umwandeln
         images = convert_from_path(pdf_path)
         extracted_text = []
 
         for i, image in enumerate(images):
-            # Speichere jede Seite als Bild
             image_path = os.path.join(output_folder, f"page_{i + 1}.jpg")
             image.save(image_path, 'JPEG')
 
-            # OCR auf die Seite anwenden
             text = pytesseract.image_to_string(image)
             extracted_text.append(text)
 
