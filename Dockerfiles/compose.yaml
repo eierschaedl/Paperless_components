@@ -3,8 +3,8 @@ version: '3.8'
 services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfiles/Dockerfile-API
+      context: ..
+      dockerfile: Dockerfile-API
     container_name: rest-api
     ports:
       - "8081:8081"
@@ -17,8 +17,8 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfiles/Dockerfile-Frontend
+      context: ..
+      dockerfile: Dockerfile-Frontend
     container_name: frontend
     ports:
       - "81:81"
@@ -27,8 +27,8 @@ services:
 
   postgres:
     build:
-      context: .
-      dockerfile: Dockerfiles/Dockerfile-DB
+      context: ..
+      dockerfile: Dockerfile-DB
     container_name: Datenbank
     ports:
       - "5432:5432"
@@ -51,14 +51,28 @@ services:
 
   tesseract-ocr:
     build:
-      context: .
-      dockerfile: Dockerfiles/Dockerfile-Tesseract-OCR
+      context: ..
+      dockerfile: Dockerfile-Tesseract-OCR
     container_name: tesseract-ocr
     volumes:
       - shared-pdfs:/app/pdfs
     networks:
       - app-network
     command: python main.py
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - shared-pdfs
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9090"
+
 
 networks:
   app-network:

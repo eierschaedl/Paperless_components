@@ -1,0 +1,9 @@
+FROM minio/minio
+
+ENV MINIO_ROOT_USER=minioadmin
+ENV MINIO_ROOT_PASSWORD=minioadmin
+
+WORKDIR /data
+
+EXPOSE 9000 9090
+CMD ["minio", "server", "/data"]
