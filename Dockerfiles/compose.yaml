@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: ..
-      dockerfile: Dockerfile-API
+      dockerfile: Dockerfiles/Dockerfile-API
     container_name: rest-api
     ports:
       - "8081:8081"
@@ -18,7 +18,7 @@ services:
   frontend:
     build:
       context: ..
-      dockerfile: Dockerfile-Frontend
+      dockerfile: Dockerfiles/Dockerfile-Frontend
     container_name: frontend
     ports:
       - "81:81"
@@ -28,7 +28,7 @@ services:
   postgres:
     build:
       context: ..
-      dockerfile: Dockerfile-DB
+      dockerfile: Dockerfiles/Dockerfile-DB
     container_name: Datenbank
     ports:
       - "5432:5432"
@@ -52,7 +52,7 @@ services:
   tesseract-ocr:
     build:
       context: ..
-      dockerfile: Dockerfile-Tesseract-OCR
+      dockerfile: Dockerfiles/Dockerfile-Tesseract-OCR
     container_name: tesseract-ocr
     volumes:
       - shared-pdfs:/app/pdfs
@@ -85,5 +85,5 @@ volumes:
     driver: local
     driver_opts:
       o: bind
-      device: ./PDFs
+      device: ../PDFs
       type: none

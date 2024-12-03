@@ -1,20 +1,15 @@
-# Verwende ein Python-Basisimage
 FROM python:3.9-slim
 
-# Installiere Systempakete (Tesseract und Poppler)
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
     poppler-utils \
     && apt-get clean
 
-# Installiere Python-Abhängigkeiten
 COPY src/main/resources/requirements-python.txt /app/requirements-python.txt
 WORKDIR /app
 RUN pip install --no-cache-dir -r /app/requirements-python.txt
 
-# Kopiere den Python-Code
 COPY src/OCR /app
 
-# Setze den Startbefehl
 CMD ["python", "main.py"]
