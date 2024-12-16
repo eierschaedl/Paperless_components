@@ -20,5 +20,6 @@ public class MessageController {
         publisher.sendMessage(message);
         return ResponseEntity.ok("Message sent: " + message);
     }
+
 }
 
