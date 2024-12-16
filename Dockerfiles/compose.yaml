@@ -59,18 +59,18 @@ services:
     networks:
       - app-network
 
-#  minio:
-#    image: minio/minio
-#    container_name: minio
-#    ports:
-#      - "9000:9000"
-#      - "9090:9090"
-#    volumes:
-#      - shared-pdfs
-#    environment:
-#      MINIO_ROOT_USER: minioadmin
-#      MINIO_ROOT_PASSWORD: minioadmin
-#    command: server /data --console-address ":9090"
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - shared-pdfs:/app/pdfs
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9090"
 
 
 networks:
