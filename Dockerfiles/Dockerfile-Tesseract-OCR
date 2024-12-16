@@ -13,6 +13,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY src/main/resources/requirements-python.txt /app/requirements-python.txt
 WORKDIR /app
 RUN pip install --no-cache-dir -r /app/requirements-python.txt
-
 COPY src/OCR /app
 CMD ["python", "main.py"]
