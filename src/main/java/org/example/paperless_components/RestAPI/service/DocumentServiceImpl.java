@@ -48,9 +48,10 @@ public class DocumentServiceImpl {
     }
 
     public DocumentDto saveDocumentData(DocumentDto documentDto) {
-        //save to DB
-        documentDto.setId(123L);
-        return documentDto;
+        DocumentEntity documentEntity = documentMapper.mapToEntity(documentDto);
+        documentEntity = documentRepository.save(documentEntity);
+        //DB created id, so now retrieved document has unique id
+        return documentMapper.mapToDto(documentEntity);
     }
 
     public DocumentDto uploadDocument(DocumentDto documentDto) {

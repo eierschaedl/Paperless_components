@@ -21,6 +21,9 @@ public class DocumentEntity {
     private String name;
 
     private String filepath;
+
+    private String extractedText;
+
     private Timestamp dateupload;
 
 }

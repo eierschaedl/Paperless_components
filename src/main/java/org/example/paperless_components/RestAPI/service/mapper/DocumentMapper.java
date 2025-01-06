@@ -15,6 +15,7 @@ public class DocumentMapper extends AbstractMapper<DocumentEntity, DocumentDto> 
                 .id(source.getId())
                 .name(source.getName())
                 .path(source.getFilepath())
+                .extractedText(source.getExtractedText())
                 .dateupload(source.getDateupload())
                 .build();
     }
@@ -27,6 +28,7 @@ public class DocumentMapper extends AbstractMapper<DocumentEntity, DocumentDto> 
                 .id(source.getId())
                 .name(source.getName())
                 .filepath(source.getPath())
+                .extractedText(source.getExtractedText())
                 .dateupload(source.getDateupload())
                 .build();
     }

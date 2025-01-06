@@ -42,7 +42,6 @@ public class DocumentAPI {
             DocumentDto savedDocument = documentService.saveDocumentData(documentDto);
 
             rabbitMQService.sendMessageToQueue("Hello, RabbitMQ!");
-            //DocumentDto uploadedDocument = documentService.uploadDocument(documentDto);
             return ResponseEntity.ok(savedDocument);
         } catch (Exception e) {
             e.printStackTrace();
