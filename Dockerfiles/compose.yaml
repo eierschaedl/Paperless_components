@@ -66,11 +66,40 @@ services:
       - "9000:9000"
       - "9090:9090"
     volumes:
-      - shared-pdfs:/app/pdfs
+      - minio_data:/data
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9090"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    #mem_limit: 1g
+    ports:
+      - "9200:9200"  # Elasticsearch API
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - app-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    container_name: kibana
+    ports:
+      - "5601:5601"  # Kibana Web Interface
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - app-network
 
 networks:
   app-network:
@@ -85,3 +114,7 @@ volumes:
       o: bind
       device: ../PDFs
       type: none
+  es_data:
+    driver: local
+  minio_data:
+      driver: local
