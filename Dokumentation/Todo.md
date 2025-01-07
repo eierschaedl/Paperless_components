@@ -6,7 +6,7 @@
           Endpoints defined by the team
 - [x]  4. Requests to endpoints return a hardcoded result
 - [x]  5. Docker:
-    - [x] Dockerfile für API erstellen
+    - [x] Dockerfile für API_etc erstellen
     - [x] Initial docker-compose.yml, used to run the REST-server inside a container
 
 ---

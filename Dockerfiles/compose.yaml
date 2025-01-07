@@ -100,7 +100,7 @@ services:
         hard: -1
     #mem_limit: 1g
     ports:
-      - "9200:9200"  # Elasticsearch API
+      - "9200:9200"  # Elasticsearch API_etc
     volumes:
       - es_data:/usr/share/elasticsearch/data
     networks:
