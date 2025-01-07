@@ -43,6 +43,13 @@ class TestMinioScript(unittest.TestCase):
         with self.assertRaises(S3Error):
             main()
 
+    def test_main_s3error_logging2(self, mock_print):
+        mock_client = MagicMock()
+        mock_minio_class.return_value = mock_client
+        mock_client.bucket_exists.side_effect = S3Error("BadRequest", "Something", "", "", "", None)
+
+        main()
+        self.assertTrue(any("An error occurred:" in call[0][0] for call in mock_print.call_args_list))
 
 if __name__ == "__main__":
     unittest.main()
