@@ -109,7 +109,7 @@ def main():
     channel.basic_consume(
         queue='OCR_QUEUE',
         on_message_callback=callback,
-        auto_ack=True
+        auto_ack=False
     )
 
     print("[*] Waiting for messages. To exit press CTRL+C")
