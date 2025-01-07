@@ -2,6 +2,6 @@ CREATE TABLE documents (
    id SERIAL PRIMARY KEY,
    documentName VARCHAR(100) NOT NULL,
    filePath VARCHAR(120) NOT NULL,
+   extractedText TEXT,
    dateUpload TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
