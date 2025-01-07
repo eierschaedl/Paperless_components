@@ -16,7 +16,7 @@ public class RabbitMQPublisher {
     }
 
     public void sendMessage(String message) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.ECHO_IN_QUEUE_NAME, message);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.OCR_QUEUE_NAME, message);
         System.out.println("Sent message: " + message);
     }
 }

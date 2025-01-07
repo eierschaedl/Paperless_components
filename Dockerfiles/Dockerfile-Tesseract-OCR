@@ -1,17 +1,31 @@
+# Dockerfiles/Dockerfile-Tesseract-OCR
+
 FROM python:3.9-slim
 
+# Erstelle die sources.list
 RUN echo "deb http://ftp.de.debian.org/debian bookworm main" > /etc/apt/sources.list && \
     echo "deb http://ftp.de.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
     echo "deb http://security.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list
 
+# Installiere Tesseract und notwendige Pakete
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     libtesseract-dev \
     poppler-utils \
+    curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Installiere Python-Abhängigkeiten
 COPY src/main/resources/requirements-python.txt /app/requirements-python.txt
 WORKDIR /app
 RUN pip install --no-cache-dir -r /app/requirements-python.txt
+
+# Kopiere den OCR-Code
 COPY src/OCR /app
+
+# Überprüfe den Inhalt des OCR-Verzeichnisses
+RUN ls -l /app
+
+# Setze das Arbeitsverzeichnis und den Startbefehl
+WORKDIR /app
 CMD ["python", "main.py"]

@@ -25,7 +25,8 @@ public class DocumentAPI {
     @PostMapping("/upload")
     public ResponseEntity<DocumentDto> postDocument(@RequestBody DocumentDto documentDto) {
         DocumentDto uploadedDocument = documentService.uploadDocument(documentDto);
-        rabbitMQService.sendMessageToQueue("Hello, RabbitMQ!");
+        System.out.println("uploadedDocument: " + uploadedDocument.getPath());
+        rabbitMQService.sendMessageToQueue(uploadedDocument.getPath());
         return ResponseEntity.ok(uploadedDocument);
     }
 

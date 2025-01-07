@@ -58,6 +58,12 @@ services:
       - shared-pdfs:/app/pdfs
     networks:
       - app-network
+    environment:
+      RABBITMQ_HOST: rabbitmq      # DNS-Name vom RabbitMQ-Service
+      RABBITMQ_USER: rabbitmqadmin
+      RABBITMQ_PASS: rabbitmqadmin
+    depends_on:
+      - rabbitmq
 
   minio:
     image: minio/minio

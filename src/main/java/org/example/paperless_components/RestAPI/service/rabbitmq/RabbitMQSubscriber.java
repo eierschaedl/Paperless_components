@@ -7,7 +7,7 @@ import org.example.paperless_components.RestAPI.configuration.RabbitMQConfig;
 @Service
 public class RabbitMQSubscriber {
 
-    @RabbitListener(queues = RabbitMQConfig.ECHO_IN_QUEUE_NAME)
+    @RabbitListener(queues = RabbitMQConfig.OCR_QUEUE_NAME)
     public void receiveMessage(String message) {
         System.out.println("Received message: " + message);
     }
