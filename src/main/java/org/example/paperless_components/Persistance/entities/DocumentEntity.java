@@ -20,10 +20,9 @@ public class DocumentEntity {
     @Column(name = "documentname")
     private String name;
 
+    @Column(name = "filepath")
     private String filepath;
 
+    @Column(name = "extracted_text", columnDefinition = "TEXT")
     private String extractedText;
-
-    private Timestamp dateupload;
-
 }

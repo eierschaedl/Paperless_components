@@ -1,4 +1,6 @@
 package org.example.paperless_components.RestAPI.api;
+import org.example.paperless_components.Persistance.entities.DocumentEntity;
+import org.example.paperless_components.Persistance.repos.DocumentRepo;
 import org.example.paperless_components.RestAPI.service.DocumentService;
 import org.example.paperless_components.RestAPI.service.DocumentServiceImpl;
 import org.example.paperless_components.RestAPI.service.dtos.DocumentDto;
@@ -19,22 +21,24 @@ import java.util.List;
 public class DocumentAPI {
     private final DocumentServiceImpl documentService;
     private final RabbitMQService rabbitMQService;
+    private final DocumentRepo documentRepo;
 
     @Autowired
-    public DocumentAPI(DocumentServiceImpl documentService, RabbitMQService rabbitMQService) {
+    public DocumentAPI(DocumentServiceImpl documentService, RabbitMQService rabbitMQService, DocumentRepo documentRepo) {
         this.documentService = documentService;
         this.rabbitMQService = rabbitMQService;
+        this.documentRepo = documentRepo;
     }
 
     @PostMapping("/upload")
     public ResponseEntity<DocumentDto> postDocument(@RequestParam("file") MultipartFile file){
         try {
             String filePath = documentService.saveFile(file);
+
             DocumentDto documentDto = DocumentDto.builder()
                     .id(null)
                     .name(file.getOriginalFilename())
                     .path(filePath)
-                    .dateupload(Timestamp.from(Instant.now()))
                     .build();
 
             DocumentDto savedDocument = documentService.saveDocumentData(documentDto);
@@ -59,9 +63,7 @@ public class DocumentAPI {
 
     @PutMapping("/{documentId}/metadata")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public ResponseEntity<Void> updateDocumentMetadata(@PathVariable String documentId) {
-        return null;
-    }
+    public ResponseEntity<Void> updateDocumentMetadata(@PathVariable String documentId) { return null; }
 
     @DeleteMapping("/{documentId}")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
@@ -75,5 +77,13 @@ public class DocumentAPI {
         return null;
     }
 
+    public void updateText(String filepath, String extractedText) {
+        DocumentEntity document = documentRepo.findByFilepath(filepath);
 
+        if(document == null){
+            throw new IllegalArgumentException("Document with filepath " + filepath + " not found");
+        }
+        document.setExtractedText(extractedText);
+        documentRepo.save(document);
+    }
 }

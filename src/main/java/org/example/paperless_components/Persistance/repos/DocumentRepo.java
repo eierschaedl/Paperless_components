@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DocumentRepo extends JpaRepository<DocumentEntity, Long>{
-
+    DocumentEntity findByFilepath(String filepath);
 }

@@ -17,6 +17,4 @@ public class DocumentDto {
     private String name;
     private String path;
     private String extractedText;
-    private Timestamp dateupload;
-
 }
