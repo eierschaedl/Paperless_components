@@ -2,3 +2,4 @@ pika
 pdf2image
 pytesseract
 Pillow
+minio

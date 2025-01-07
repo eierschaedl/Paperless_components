@@ -30,8 +30,6 @@ public class DocumentAPI {
     public ResponseEntity<DocumentDto> postDocument(@RequestParam("file") MultipartFile file){
         try {
             String filePath = documentService.saveFile(file);
-
-
             DocumentDto documentDto = DocumentDto.builder()
                     .id(null)
                     .name(file.getOriginalFilename())
@@ -41,7 +39,7 @@ public class DocumentAPI {
 
             DocumentDto savedDocument = documentService.saveDocumentData(documentDto);
 
-            rabbitMQService.sendMessageToQueue("Hello, RabbitMQ!");
+            rabbitMQService.sendMessageToQueue(filePath);
             return ResponseEntity.ok(savedDocument);
         } catch (Exception e) {
             e.printStackTrace();

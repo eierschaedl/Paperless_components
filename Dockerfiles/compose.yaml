@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfiles/Dockerfile-Tesseract-OCR
     container_name: tesseract-ocr
     volumes:
-      - shared-pdfs:/app/pdfs
+      - minio_data:/app/pdfs
     networks:
       - app-network
     environment:

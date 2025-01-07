@@ -1,11 +1,22 @@
 import os
 import json
 import pika
+from minio import Minio
 from pdf2image import convert_from_path
 from PIL import Image
 import pytesseract
 
-def process_pdf(pdf_path, output_folder):
+def download_pdf_from_minio(minio_client, bucket_name, object_name, local_file):
+    """
+    Lädt ein PDF aus MinIO (bucket_name/object_name) herunter
+    und speichert es in local_file.
+    """
+    print(f"[+] Downloading from MinIO: bucket={bucket_name}, object={object_name}")
+    minio_client.fget_object(bucket_name, object_name, local_file)
+    print(f"[+] Download completed: {local_file}")
+
+
+def process_pdf(pdf_path):
     """
     Öffnet das angegebene PDF, konvertiert jede Seite in ein Image
     und führt dann OCR durch, um den Text auszulesen.
@@ -32,40 +43,49 @@ def callback(ch, method, properties, body):
     Baut den vollständigen Pfad, führt OCR aus und schickt das Ergebnis
     als JSON zurück an 'RESULT_QUEUE'.
     """
+
     # 1) Dateiname auslesen und Anführungszeichen entfernen
     file_name = body.decode('utf-8').strip('"')
     print(f"[*] Received file name: {file_name}")
 
-    # 2) Pfad /app/pdfs/DATEINAME
-    pdf_path = os.path.join("/app/pdfs", file_name)
-    print(f"[*] Full PDF path: {pdf_path}")
+    # Lokaler Pfad im Container, wohin du speichern möchtest:
+    local_file = "/app/pdfs/" + file_name
 
-    # 3) OCR-Verarbeitung
-    output_folder = "/app/output"
-    os.makedirs(output_folder, exist_ok=True)
-    extracted_text = process_pdf(pdf_path, output_folder)
+    # 1) PDF von MinIO herunterladen
+    download_pdf_from_minio(minio_client, "documents", file_name, local_file)
 
-    # 4) JSON-Objekt bauen (Dateiname + OCR-Text)
-    result_payload = {
-        "filepath": file_name,
-        "extractedText": extracted_text
+    # 2) OCR durchführen
+    extracted_texts = process_pdf(local_file)
+    # ...
+
+    # 3) OPTIONAL: Ergebnis an RESULT_QUEUE schicken
+    result_dict = {
+        "filename": file_name,
+        "extracted_text": extracted_texts
     }
-    # -> z.B. {"filename":"test_pdf.pdf","extracted_text":["Seite1","Seite2"]}
-
-    result_json = json.dumps(result_payload)
-
-    # 5) Ergebnis an RESULT_QUEUE senden
-    ch.basic_publish(
-        exchange='',
-        routing_key='RESULT_QUEUE',
-        body=result_json.encode('utf-8')
-    )
+    result_json = json.dumps(result_dict)
+    ch.basic_publish(exchange='', routing_key='RESULT_QUEUE', body=result_json.encode('utf-8'))
     print("[x] Sent OCR result (JSON) to RESULT_QUEUE")
 
-    # 6) Ack, wenn fertig
+    # 4) Nachricht bestätigen (wenn auto_ack=False)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 def main():
+    # 1) MinIO-Verbindungsdaten aus ENV lesen
+    minio_host = os.getenv("MINIO_HOST", "minio")
+    minio_port = os.getenv("MINIO_PORT", "9000")
+    minio_access_key = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
+    minio_secret_key = os.getenv("MINIO_SECRET_KEY", "minioadmin")
+    use_secure = False  # Falls du kein HTTPS in MinIO hast
+
+    global minio_client
+    minio_client = Minio(
+        f"{minio_host}:{minio_port}",
+        access_key=minio_access_key,
+        secret_key=minio_secret_key,
+        secure=use_secure
+    )
+
     # Verbindung zu RabbitMQ
     rabbitmq_user = os.getenv("RABBITMQ_USER", "rabbitmqadmin")
     rabbitmq_pass = os.getenv("RABBITMQ_PASS", "rabbitmqadmin")
@@ -89,7 +109,7 @@ def main():
     channel.basic_consume(
         queue='OCR_QUEUE',
         on_message_callback=callback,
-        auto_ack=False
+        auto_ack=True
     )
 
     print("[*] Waiting for messages. To exit press CTRL+C")
