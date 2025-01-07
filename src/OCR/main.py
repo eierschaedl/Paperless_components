@@ -15,7 +15,6 @@ def process_pdf(pdf_path, output_folder):
         extracted_text = []
 
         for i, image in enumerate(images):
-            # OCR auf dem Bild
             text = pytesseract.image_to_string(image)
             extracted_text.append(text)
 
@@ -28,17 +27,16 @@ def process_pdf(pdf_path, output_folder):
 
 def callback(ch, method, properties, body):
     """
-    Wird aufgerufen, sobald eine Nachricht in der Queue 'OCR_QUEUE' ankommt.
-    - Erwartet: Einen Dateinamen als String (ggf. mit umschließenden " zu Beginn/Ende).
-    - Verarbeitet das PDF mittels OCR.
-    - Schickt das Ergebnis (extracted_text) in die RESULT_QUEUE.
-    - Bestätigt anschließend die Nachricht (manual ack).
+    Consumer-Callback für 'OCR_QUEUE'.
+    Erwartet einen Dateinamen als String (ggf. mit Anführungszeichen drumherum).
+    Baut den vollständigen Pfad, führt OCR aus und schickt das Ergebnis
+    als JSON zurück an 'RESULT_QUEUE'.
     """
-    # 1) Dateinamen aus Message lesen und Anführungszeichen entfernen
+    # 1) Dateiname auslesen und Anführungszeichen entfernen
     file_name = body.decode('utf-8').strip('"')
     print(f"[*] Received file name: {file_name}")
 
-    # 2) Pfad zusammensetzen -> /app/pdfs/test_pdf.pdf
+    # 2) Pfad /app/pdfs/DATEINAME
     pdf_path = os.path.join("/app/pdfs", file_name)
     print(f"[*] Full PDF path: {pdf_path}")
 
@@ -47,26 +45,32 @@ def callback(ch, method, properties, body):
     os.makedirs(output_folder, exist_ok=True)
     extracted_text = process_pdf(pdf_path, output_folder)
 
-    # 4) Ergebnis in RESULT_QUEUE schicken
-    #    Wir wandeln die Liste der Seiten in JSON um. Du kannst natürlich auch join() benutzen.
-    extracted_text_json = json.dumps(extracted_text)
+    # 4) JSON-Objekt bauen (Dateiname + OCR-Text)
+    result_payload = {
+        "filepath": file_name,
+        "extractedText": extracted_text
+    }
+    # -> z.B. {"filename":"test_pdf.pdf","extracted_text":["Seite1","Seite2"]}
 
+    result_json = json.dumps(result_payload)
+
+    # 5) Ergebnis an RESULT_QUEUE senden
     ch.basic_publish(
         exchange='',
         routing_key='RESULT_QUEUE',
-        body=extracted_text_json.encode('utf-8')
+        body=result_json.encode('utf-8')
     )
-    print(f"[x] Sent OCR result to RESULT_QUEUE")
+    print("[x] Sent OCR result (JSON) to RESULT_QUEUE")
 
-    # 5) Nachricht bestätigen (weil auto_ack=False in main())
+    # 6) Ack, wenn fertig
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 def main():
     # Verbindung zu RabbitMQ
     rabbitmq_user = os.getenv("RABBITMQ_USER", "rabbitmqadmin")
     rabbitmq_pass = os.getenv("RABBITMQ_PASS", "rabbitmqadmin")
-    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_pass)
 
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_pass)
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(
             host='rabbitmq',
@@ -75,14 +79,13 @@ def main():
     )
     channel = connection.channel()
 
-    # 1) OCR_QUEUE deklarieren
+    # Sicherstellen, dass die Queues existieren
     channel.queue_declare(queue='OCR_QUEUE', durable=True)
-    # 2) RESULT_QUEUE deklarieren (falls du sie nicht an anderer Stelle deklarierst)
     channel.queue_declare(queue='RESULT_QUEUE', durable=True)
 
     channel.basic_qos(prefetch_count=1)
 
-    # Consumer konfigurieren -> manuelles Ack
+    # Consumer registrieren
     channel.basic_consume(
         queue='OCR_QUEUE',
         on_message_callback=callback,
