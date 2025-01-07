@@ -84,6 +84,7 @@ public class DocumentAPI {
             throw new IllegalArgumentException("Document with filepath " + filepath + " not found");
         }
         document.setExtractedText(extractedText);
+        System.out.println(document.getExtractedText());
         documentRepo.save(document);
     }
 }

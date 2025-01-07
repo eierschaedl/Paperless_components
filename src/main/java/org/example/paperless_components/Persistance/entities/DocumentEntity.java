@@ -23,6 +23,6 @@ public class DocumentEntity {
     @Column(name = "filepath")
     private String filepath;
 
-    @Column(name = "extracted_text", columnDefinition = "TEXT")
+    @Column(name = "extracted_text", columnDefinition = "MEDIUMTEXT")
     private String extractedText;
 }

@@ -20,22 +20,26 @@ public class RabbitMQSubscriber {
     @RabbitListener(queues = RabbitMQConfig.RESULT_QUEUE_NAME)
     public void receiveMessage(String message) {
         System.out.println("Received message: " + message);
-    }
-    //@RabbitListener(queues = RabbitMQConfig.RESULT_QUEUE)
-    //@RabbitListener(queues = RabbitMQConfig.RESULT_QUEUE_NAME)
-    /*
-    public void receiveMessage(String message) {
         try {
+
             JsonNode jsonNode = objectMapper.readTree(message);
 
-            String filePath = jsonNode.get("filePath").asText();
-            String extractedText = jsonNode.get("extractedText").asText();
+            String filePath = jsonNode.get("filename").asText();
+            System.out.println(filePath);
+
+            JsonNode extractedTextNode = jsonNode.get("extracted_text");
+            if (extractedTextNode != null && extractedTextNode.isArray() && extractedTextNode.size() > 0) {
+                String extractedText = extractedTextNode.get(0).asText();
+                System.out.println("Extracted Text: " + extractedText);
+            System.out.println(extractedText);
 
             documentAPI.updateText(filePath, extractedText);
-
+            }
+            else {
+                System.err.println("Error: 'extracted_text' is missing or empty.");
+            }
         } catch (Exception e) {
             System.err.println("Error processing message: " + e.getMessage());
         }
     }
-     */
 }
